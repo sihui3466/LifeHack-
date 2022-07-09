@@ -5,11 +5,10 @@ import os
 from dotenv import load_dotenv
 import json
 load_dotenv()
-# import googlemaps
+from googlemaps import Client as GoogleMaps
 
 BOT_TOKEN= os.getenv('BOT_TOKEN')
 # GOOGLEMAP=os.getenv('API_KEY')
-# gmaps=GoogleMaps(GOOGLEMAP)
 
 #update object contain all users name
 async def hello(options,context):
@@ -74,13 +73,32 @@ async def getname(options,context):
                 InlineKeyboardButton("Others",callback_data="others") #callback data means data that is saved and passed back to us when users choose an option
             ]
         ]
-        print('Hi')
         reply_markup=InlineKeyboardMarkup(keyboard)
         # await options.message.reply_text("What is favourite food", reply_markup=reply_markup)
         await options.callback_query.message.edit_text("Select The Type of Recyclables.", reply_markup=reply_markup)
+    return recycle_vid
+
+async def recycle_vid(options,context):
+    query=options.callback_query
+    print(query)
+    await query.answer()
+
+    userinput2=query.data
+
+    reply_markup2 = "https://www.youtube.com/watch?v=YJJbipvCHSA"
+    
+    if (userinput2=='plastic'):
+        print('Hi')
+        # await options.callback_query.message.edit_text("Youtube=>\https://www.youtube.com/watch?v=YJJbipvCHSA")
+        await options.callback_query.message.edit_text("Select The Type of Recyclables.", reply_markup=reply_markup2)
+
+
+# async def recycle_vid(options:Update, context:CallbackContext):
+#     await options.message.reply_text("Youtube=>\https://www.youtube.com/watch?v=YJJbipvCHSA")
 
 bot=ApplicationBuilder().token(BOT_TOKEN).build()
 # bot.add_handler(CommandHandler("hello", hello))
 bot.add_handler(CommandHandler("start", choice))
 bot.add_handler(CallbackQueryHandler(getname))
+bot.add_handler(CallbackQueryHandler(recycle_vid))
 bot.run_polling()
