@@ -1,12 +1,11 @@
-#sample can change
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ApplicationBuilder, ConversationHandler, CallbackQueryHandler, CommandHandler, MessageHandler, filters
 import requests
 import os
 from dotenv import load_dotenv
 import json
-
 load_dotenv()
+# import googlemaps
 
 BOT_TOKEN= os.getenv('BOT_TOKEN')
 # GOOGLEMAP=os.getenv('API_KEY')
@@ -14,50 +13,74 @@ BOT_TOKEN= os.getenv('BOT_TOKEN')
 
 #update object contain all users name
 async def hello(options,context):
-    await options.message.reply_text(f'Hello {options.effective_user.first_name}! \n\nWelcome to SihuiTest_bot, What would you like to do? \n\nIf you have any queries, please contact us at @sihuiiii27\n\n/question : Select to start game');
+    await options.message.reply_text(f'Hello {options.effective_user.first_name}! \n\n/start : Select an option');
 
 async def choice(options,context):
     keyboard=[ #4 dimensional array 4 rows
             [ 
-                InlineKeyboardButton("Lex",callback_data="lex") #callback data means data that is saved and passed back to us when users choose an option
+                InlineKeyboardButton("Do you need help in preparing the recyclables?",callback_data="prepare") #callback data means data that is saved and passed back to us when users choose an option
             ],
             [ 
-                InlineKeyboardButton("Damian",callback_data="damian") #callback data means data that is saved and passed back to us when users choose an option
-            ],
-            [ 
-                InlineKeyboardButton("Kayla",callback_data="kayla") #callback data means data that is saved and passed back to us when users choose an option
+                InlineKeyboardButton("Find your nearest recycling point.",callback_data="point") #callback data means data that is saved and passed back to us when users choose an option
             ]
     ]
     reply_markup=InlineKeyboardMarkup(keyboard)
-    await options.message.reply_text("Who is the smartest?", reply_markup=reply_markup)
+    await options.message.reply_text(f'Hello {options.effective_user.first_name}! What Would You Like To Do Today? :)', reply_markup=reply_markup)
     return getname
 
 async def getname(options,context):
     query=options.callback_query
-
+    print(query)
     await query.answer()
 
-    name=query.data
+    userinput =query.data
 
-    await query.edit_message_text(text=f"{options.effective_user.first_name} selected option: {name} is the smartest")
+    # await query.edit_message_text(text=f"{options.effective_user.first_name} is in {location}")
 
-    if name=='lex':
-        keyboard2=[ 
+    if (userinput=='point'):
+        keyboard=[ #4 dimensional array 4 rows
             [ 
-                InlineKeyboardButton("Pancake",callback_data="pancake"), #callback data means data that is saved and passed back to us when users choose an option
-                InlineKeyboardButton("Cake",callback_data="cake"), #callback data means data that is saved and passed back to us when users choose an option
+                InlineKeyboardButton("North",callback_data="north") #callback data means data that is saved and passed back to us when users choose an option
             ],
             [ 
-                InlineKeyboardButton("Bread",callback_data="bread"), #callback data means data that is saved and passed back to us when users choose an option
-                InlineKeyboardButton("Puff",callback_data="puff"), #callback data means data that is saved and passed back to us when users choose an option
+                InlineKeyboardButton("Central",callback_data="central") #callback data means data that is saved and passed back to us when users choose an option
+            ],
+            [ 
+                InlineKeyboardButton("West",callback_data="west") #callback data means data that is saved and passed back to us when users choose an option
+            ],
+            [ 
+                InlineKeyboardButton("East",callback_data="east") #callback data means data that is saved and passed back to us when users choose an option
             ]
         ]
-    reply_markup2=InlineKeyboardMarkup(keyboard2)
-    await options.message.reply_text("What is favourite food", reply_markup=reply_markup2)
-
+        print('Hi')
+        reply_markup=InlineKeyboardMarkup(keyboard)
+        # await options.message.reply_text("What is favourite food", reply_markup=reply_markup)
+        await options.callback_query.message.edit_text("Which Region Do You Live In?", reply_markup=reply_markup)
+    if (userinput=='prepare'):
+        keyboard=[ #4 dimensional array 4 rows
+            [ 
+                InlineKeyboardButton("Plastic",callback_data="plastic") #callback data means data that is saved and passed back to us when users choose an option
+            ],
+            [ 
+                InlineKeyboardButton("Aluminium",callback_data="aluminium") #callback data means data that is saved and passed back to us when users choose an option
+            ],
+            [ 
+                InlineKeyboardButton("Paper",callback_data="paper") #callback data means data that is saved and passed back to us when users choose an option
+            ],
+                        [ 
+                InlineKeyboardButton("Electronics",callback_data="ewaste") #callback data means data that is saved and passed back to us when users choose an option
+            ],
+            [ 
+                InlineKeyboardButton("Others",callback_data="others") #callback data means data that is saved and passed back to us when users choose an option
+            ]
+        ]
+        print('Hi')
+        reply_markup=InlineKeyboardMarkup(keyboard)
+        # await options.message.reply_text("What is favourite food", reply_markup=reply_markup)
+        await options.callback_query.message.edit_text("Select The Type of Recyclables.", reply_markup=reply_markup)
 
 bot=ApplicationBuilder().token(BOT_TOKEN).build()
-bot.add_handler(CommandHandler("start", hello))
-bot.add_handler(CommandHandler("question", choice))
+# bot.add_handler(CommandHandler("hello", hello))
+bot.add_handler(CommandHandler("start", choice))
 bot.add_handler(CallbackQueryHandler(getname))
 bot.run_polling()
