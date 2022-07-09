@@ -54,42 +54,6 @@ async def getname(options,context):
     reply_markup2=InlineKeyboardMarkup(keyboard2)
     await options.message.reply_text("What is favourite food", reply_markup=reply_markup2)
 
-# async def pointsys():
-#     question_1 = '1) Who was the first American woman in space? '
-#     correct_answer_1 = 'Sally Ride'
-#     candidate_answer_1 = input(question_1)
-    
-#     question_2 = '2) True or false: 5 kilometer == 5000 meters? '
-#     correct_answer_2 = 'true'
-#     candidate_answer_2 = input(question_2)
-    
-#     question_3 = '3) (5 + 3)/2 * 10 = ? '
-#     correct_answer_3 = '40'
-#     candidate_answer_3 = input(question_3)
-    
-#     question_4 = "4) Given the list [8, 'Orbit', 'Trajectory', 45], what entry is at index 2? "
-#     correct_answer_4 = 'Trajectory'
-#     candidate_answer_4 = input(question_4)
-    
-#     question_5 = '5) What is the minimum crew size for the ISS? '
-#     correct_answer_5 = '3'
-#     candidate_answer_5 = input(question_5)
-    
-#     #lists that correlate to the variables assigned above
-    
-#     quiz_questions = [question_1, question_2, question_3, question_4, question_5]
-#     correct_answers = [correct_answer_1, correct_answer_2, correct_answer_3, correct_answer_4, correct_answer_5]
-#     candidate_answers = [candidate_answer_1, candidate_answer_2, candidate_answer_3, candidate_answer_4, candidate_answer_5]
-    
-#     points = 0
-#     for correct, candidate in zip(correct_answers, candidate_answers):
-#         if correct.lower() == candidate.lower():
-#             points += 1
-#             print(f'Your Answer: {candidate}\nCorrect Answer: {correct}') 
-#         else:
-#             print('Incorrect.\nThe correct answer is: ', correct)
-#     print(points)
-        
 
 bot=ApplicationBuilder().token(BOT_TOKEN).build()
 bot.add_handler(CommandHandler("start", hello))
